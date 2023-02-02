@@ -94,7 +94,7 @@ def add_series(title, year, genre, season, episodes):
         movie_series_list.append(position)
     return movie_series_list
 
-def How_many_episodes(title):
+def how_many_episodes(title):
     series_list = get_series()
     number_of_episodes = 0
     for position in series_list:
