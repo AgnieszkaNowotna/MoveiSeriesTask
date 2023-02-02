@@ -1,4 +1,5 @@
 import random 
+import datetime as dt 
 
 class Movie():
     def __init__(self, title, year, genre, views):
@@ -42,8 +43,10 @@ def get_movies():
             movie_list.append(position)
         else:
             pass
-    movie_by_title = sorted(movie_list, key = lambda movie: movie.title)
-    return movie_by_title
+    movies_by_title = sorted(movie_list, key = lambda movie: movie.title)
+    return movies_by_title
+
+movies_list = get_movies()
 
 def get_series():
     series_list = []
@@ -55,6 +58,8 @@ def get_series():
     series_by_title = sorted(series_list, key = lambda series: series.title) 
     return series_by_title
 
+series_list = get_series()
+
 def search(title):
     for position in movie_series_list:
         if position.title == title:
@@ -62,20 +67,36 @@ def search(title):
         else:
             pass
 
+def multiply(func):
+    def wrapper():
+        for i in range (10):
+            func()
+    return wrapper
+
+@multiply       
 def generate_views():
     position = random.choice(movie_series_list)
     position.play(random.randrange(101))
     return f'{position.title}, views: {position.views}'
 
-print("najpierw filmy")
-for position in get_movies():
+def top_titles(amount, content_type):
+    if content_type == "movies":
+        movies_by_views = sorted(movies_list, key=lambda movie: movie.views)
+        print(movies_by_views)
+        return movies_by_views[-amount:]
+    elif content_type == "series":
+        series_by_views = sorted(series_list, key = lambda series: series.views)
+        print(series_by_views)
+        return series_by_views[-amount:]
+
+
+print("Biblioteka filmów")
+generate_views()
+for position in movie_series_list:
     print(position)
+print(f'Najpopularniejsze filmy i seriale dnia {dt.date.today().strftime("%d.%m.%Y")}')
 
-print("potem seriale")
-for position in get_series():
-    print(position)
-
-print(search("Twin Peaks"))
-print(generate_views())
-
-
+for movie in top_titles(3, "movies"):
+    print(movie)
+for series in top_titles(3, "series"):
+    print(series)
